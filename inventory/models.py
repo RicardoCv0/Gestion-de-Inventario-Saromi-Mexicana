@@ -2,6 +2,7 @@ from django.db import models
 
 class Gemstone(models.Model):
     id = models.CharField(max_length=5)
+    type = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     ammount_available = models.DecimalField
 
@@ -9,7 +10,7 @@ class InventoryMovement(models.Model):
     gemstone = models.ForeignKey(Gemstone, on_delete=models.DO_NOTHING)
     ammount = models.DecimalField
     date_time = models.DateTimeField
-    responsable = models.CharField(max_length=100)
+    responsible = models.CharField(max_length=100)
 
 class EntryMovement(InventoryMovement):
     pass
