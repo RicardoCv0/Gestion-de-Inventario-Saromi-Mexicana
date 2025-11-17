@@ -1,0 +1,13 @@
+{% if gemstones_list %}
+    <ul>
+    {% for gemstone in gemstones_list %}
+        <li>
+            <a href="/inventory/{{ gemstone.id }}/">
+                {{ gemstone.name }}
+            </a>
+        </li>
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No gemstones available</p>
+{% endif %}

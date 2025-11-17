@@ -1,0 +1,12 @@
+<h1> Add gemstone </h1>
+
+<form action = {% url 'inventory:add_gemstone'%} method="post">
+    {% csrf_token %}
+
+    <fieldset>
+        <input type ="text" name="type" value="gemstone.type">
+        <input type ="text" name="name" value="gemstone.name">
+    </fieldset>
+    
+    <input type="submit" value="Create">
+</form>

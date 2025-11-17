@@ -1,0 +1,12 @@
+<h1> {{gemstone.name}} </h1>
+
+<form action = {% url 'inventory:edit_gemstone' gemstone.id%} method="post">
+    {% csrf_token %}
+
+    <fieldset>
+        <input type ="text" name="type" value="gemstone.type">
+        <input type ="text" name="name" value="gemstone.name">
+    </fieldset>
+    
+    <input type="submit" value="Edit">
+</form>
