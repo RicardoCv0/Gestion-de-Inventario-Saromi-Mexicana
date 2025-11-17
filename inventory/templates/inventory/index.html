@@ -2,7 +2,7 @@
     <ul>
     {% for gemstone in gemstones_list %}
         <li>
-            <a href="/inventory/{{ gemstone.id }}/">
+            <a href="/inventory/details/{{ gemstone.id }}/">
                 {{ gemstone.name }}
             </a>
         </li>
@@ -11,3 +11,6 @@
 {% else %}
     <p>No gemstones available</p>
 {% endif %}
+
+<br>
+<a href="/inventory/create/"> Agregar Piedra Preciosa </a>

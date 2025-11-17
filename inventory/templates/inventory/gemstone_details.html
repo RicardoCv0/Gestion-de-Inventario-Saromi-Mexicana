@@ -1,5 +1,6 @@
 <h1>{{ gemstone.name }}</h1>
 <ul>
+    <li>{{gemstone.id}}</li>
     <li>{{gemstone.type}}</li>
     <li>{{gemstone.ammount_available}}</li>
 </ul>
@@ -7,21 +8,21 @@
 <!-- GEMSTONE MOVEMENTS -->
 <a href="/inventory/entry/{{gemstone.id}}">
     Registrar entrada
-</a>
+</a> <br>
 
 <a href="/inventory/exit/{{gemstone.id}}">
     Registrar salida
-</a>
+</a> <br>
 
 <a href="/inventory/adjustment/{{gemstone.id}}">
     Ajustar cantidad disponible
-</a>
+</a> <br> <br> <br>
 
 <!-- CRUD OPERATIONS FOR GEMSTONES -->
 <a href="/inventory/edit/{{gemstone.id}}">
     Editar nombre y tipo
-</a>
+</a> <br>
 
 <a href="/inventory/delete/{{gemstone.id}}">
     Eliminar priedra preciosa
-</a>
+</a> <br>
