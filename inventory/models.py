@@ -1,7 +1,7 @@
 from django.db import models
 
 class Gemstone(models.Model):
-    id = models.CharField(max_length=5)
+    id = models.CharField(max_length=5, primary_key=True)
     type = models.CharField(max_length=100)
     name = models.CharField(max_length=100)
     ammount_available = models.DecimalField
