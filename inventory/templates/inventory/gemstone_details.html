@@ -1,28 +1,36 @@
-<h1>{{ gemstone.name }}</h1>
-<ul>
-    <li>{{gemstone.id}}</li>
-    <li>{{gemstone.type}}</li>
-    <li>{{gemstone.ammount_available}}</li>
-</ul>
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
 
-<!-- GEMSTONE MOVEMENTS -->
-<a href="/inventory/entry/{{gemstone.id}}">
-    Registrar entrada
-</a> <br>
+<body>
+    <h1>{{ gemstone.name }}</h1>
+    <ul>
+        <li>{{gemstone.id}}</li>
+        <li>{{gemstone.type}}</li>
+        <li>{{gemstone.ammount_available}}</li>
+    </ul>
 
-<a href="/inventory/exit/{{gemstone.id}}">
-    Registrar salida
-</a> <br>
+    <!-- GEMSTONE MOVEMENTS -->
+    <a href="/inventory/entry/{{gemstone.id}}">
+        Registrar entrada
+    </a> <br>
 
-<a href="/inventory/adjustment/{{gemstone.id}}">
-    Ajustar cantidad disponible
-</a> <br> <br> <br>
+    <a href="/inventory/exit/{{gemstone.id}}">
+        Registrar salida
+    </a> <br>
 
-<!-- CRUD OPERATIONS FOR GEMSTONES -->
-<a href="/inventory/edit/{{gemstone.id}}">
-    Editar nombre y tipo
-</a> <br>
+    <a href="/inventory/adjustment/{{gemstone.id}}">
+        Ajustar cantidad disponible
+    </a> <br> <br> <br>
 
-<a href="/inventory/delete/{{gemstone.id}}">
-    Eliminar priedra preciosa
-</a> <br>
+    <!-- CRUD OPERATIONS FOR GEMSTONES -->
+    <a href="/inventory/edit/{{gemstone.id}}">
+        Editar nombre y tipo
+    </a> <br>
+
+    <a href="/inventory/delete/{{gemstone.id}}">
+        Eliminar priedra preciosa
+    </a> <br>
+</body>

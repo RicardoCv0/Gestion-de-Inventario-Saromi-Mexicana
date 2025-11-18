@@ -1,0 +1,24 @@
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
+
+<body>
+    <h1> Ajuste de {{gemstone.name}}</h1>
+    
+    <form action="/inventory/adjustment/{{gemstone.id}}/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <p> Cantidad actual: {{gemstone.ammount_available}}</p>
+    
+            <p> Cantidad corregida </p>
+            <input type="number" name="ammount" min="0">
+            
+            <p> Motivo </p>
+            <input type="text" name="motive">
+        </fieldset>
+        
+        <input type="submit" value="Create">
+    </form>
+<body>

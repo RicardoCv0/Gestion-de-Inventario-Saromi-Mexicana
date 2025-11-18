@@ -1,17 +1,25 @@
-<h1> {{gemstone.name}} </h1>
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
 
-<form action="/inventory/edit/{{gemstone.id}}/" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <input type ="hidden" name="id" value="{{gemstone.id}}" >
-        
-        <p> Nombre </p>
-        <input type ="text" name="name" value="{{gemstone.name}}">
-        
-        <p> Tipo </p>
-        <input type ="text" name="type" value="{{gemstone.type}}">
+<body>
+    <h1> {{gemstone.name}} </h1>
 
-    </fieldset>
-    
-    <input type="submit" value="Edit">
-</form>
+    <form action="/inventory/edit/{{gemstone.id}}/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <input type ="hidden" name="id" value="{{gemstone.id}}" >
+            
+            <p> Nombre </p>
+            <input type ="text" name="name" value="{{gemstone.name}}">
+            
+            <p> Tipo </p>
+            <input type ="text" name="type" value="{{gemstone.type}}">
+
+        </fieldset>
+        
+        <input type="submit" value="Edit">
+    </form>
+</body>

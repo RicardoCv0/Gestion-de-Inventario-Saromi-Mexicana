@@ -1,17 +1,25 @@
-<h1> Add gemstone </h1>
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
 
-<form action="/inventory/create/" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <p> Id </p>
-        <input type ="text" name="id">
+<body>
+    <h1> Añadir priedra preciosa </h1>
 
-        <p> Nombre </p>
-        <input type ="text" name="name">
+    <form action="/inventory/create/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <p> Id </p>
+            <input type ="text" name="id">
+
+            <p> Nombre </p>
+            <input type ="text" name="name">
+            
+            <p> Tipo </p>
+            <input type ="text" name="type">
+        </fieldset>
         
-        <p> Tipo </p>
-        <input type ="text" name="type">
-    </fieldset>
-    
-    <input type="submit" value="Create">
-</form>
+        <input type="submit" value="Create">
+    </form>
+</body>

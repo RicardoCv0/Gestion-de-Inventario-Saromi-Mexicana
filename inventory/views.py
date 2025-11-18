@@ -1,11 +1,13 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
-from .forms import GemstoneForm
+from .forms import GemstoneForm, EntryForm, ExitForm, AdjustmentForm
 
 from .models import Gemstone
 
 def index(request):
     gemstones_list = Gemstone.objects.order_by("name")    
+
+    if len(gemstones_list) == 0: return render(request, "inventory/index.html")
 
     context = {
         "gemstones_list": gemstones_list,
@@ -60,10 +62,70 @@ def delete_gemstone(request, gemstone_id):
 
 # Gemstones Movement
 def entry_movement(request, gemstone_id):
-    return HttpResponse("Hellope!!, You are you are adding to the %s gemstone" % gemstone_id)
+    gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
+
+    context = {
+        "gemstone": gemstone,
+    }
+
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        
+        if not form.is_valid(): return redirect("index")
+
+        ammount = form.cleaned_data["ammount"]
+        if ammount < 0: return redirect("index")
+
+        gemstone.ammount_available += ammount
+        gemstone.save()
+
+        return render(request, "inventory/gemstone_details.html", context)
+
+
+    return render(request, "inventory/entry_movement.html", context)
 
 def adjustment_movement(request, gemstone_id):
-    return HttpResponse("Howdy!!, You are you are adjusting the %s gemstone" % gemstone_id)
+    gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
+
+    context = {
+        "gemstone": gemstone,
+    }
+    
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        
+        if not form.is_valid(): return redirect("index")
+
+        ammount = form.cleaned_data["ammount"]
+
+        if ammount < 0: return redirect("index")
+
+        gemstone.ammount_available = ammount
+        gemstone.save()
+
+        return render(request, "inventory/gemstone_details.html", context)
+
+    return render(request, "inventory/adjustment_movement.html", context)
 
 def exit_movement(request, gemstone_id):
-    return HttpResponse("Oi!!, You are you are removing from the %s gemstone" % gemstone_id)
+    gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
+
+    context = {
+        "gemstone": gemstone,
+    }
+
+    if request.method == "POST":
+        form = EntryForm(request.POST)
+        
+        if not form.is_valid(): return redirect("index")
+
+        ammount = form.cleaned_data["ammount"]
+
+        if ammount < 0 or ammount > gemstone.ammount_available: return redirect("index")
+
+        gemstone.ammount_available -= ammount
+        gemstone.save()
+
+        return render(request, "inventory/gemstone_details.html", context)
+
+    return render(request, "inventory/exit_movement.html", context)

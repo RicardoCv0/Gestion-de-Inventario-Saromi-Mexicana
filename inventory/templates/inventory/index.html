@@ -1,16 +1,24 @@
-{% if gemstones_list %}
-    <ul>
-    {% for gemstone in gemstones_list %}
-        <li>
-            <a href="/inventory/details/{{ gemstone.id }}/">
-                {{ gemstone.name }}
-            </a>
-        </li>
-    {% endfor %}
-    </ul>
-{% else %}
-    <p>No gemstones available</p>
-{% endif %}
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
 
-<br>
-<a href="/inventory/create/"> Agregar Piedra Preciosa </a>
+<body>
+    {% if gemstones_list %}
+        <ul>
+        {% for gemstone in gemstones_list %}
+            <li>
+                <a href="/inventory/details/{{ gemstone.id }}/">
+                    {{ gemstone.name }}
+                </a>
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>No piedras preciosas registradas</p>
+    {% endif %}
+
+    <br>
+    <a href="/inventory/create/"> Agregar Piedra Preciosa </a>
+</body>

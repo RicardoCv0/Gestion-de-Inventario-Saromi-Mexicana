@@ -1,0 +1,23 @@
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
+
+<body>
+    <h1> Salida de {{gemstone.name}} </h1>
+
+    <form action="/inventory/exit/{{gemstone.id}}/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <p> Cantidad </p>
+            <input type ="number" name="ammount" min="0">
+            
+            <p> Destino </p>
+            <input type ="text" name="destination" min="0">
+
+        </fieldset>
+        
+        <input type="submit" value="Create">
+    </form>
+</body>

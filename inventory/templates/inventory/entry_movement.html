@@ -1,17 +1,19 @@
-<h1> Entrada de {{gemstone.name}}</h1>
+<style>
+    body {
+        margin: 20px;
+    }
+</style>
 
-<form action="/inventory/entrada/" method="post">
-    {% csrf_token %}
-    <fieldset>
-        <p> Id </p>
-        <input type ="text" name="id">
+<body>
+    <h1> Entrada de {{gemstone.name}} </h1>
 
-        <p> Nombre </p>
-        <input type ="text" name="name">
+    <form action="/inventory/entry/{{gemstone.id}}/" method="post">
+        {% csrf_token %}
+        <fieldset>
+            <p> Cantidad </p>
+            <input type ="number" name="ammount" min="0">
+        </fieldset>
         
-        <p> Tipo </p>
-        <input type ="text" name="type">
-    </fieldset>
-    
-    <input type="submit" value="Create">
-</form>
+        <input type="submit" value="Create">
+    </form>
+</body>

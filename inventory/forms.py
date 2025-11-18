@@ -9,11 +9,14 @@ class GemstoneForm(forms.ModelForm):
 class EntryForm(forms.ModelForm):
     class Meta:
         model = EntryMovement
+        fields = ["ammount"]
 
 class ExitForm(forms.Form):
     class Meta:
         model = ExitMovement
+        fields = ["ammount", "destination"]
 
 class AdjustmentForm(forms.Form):
     class Meta:
         model = AdjustmentMovement
+        fields = ["ammount", "motive"]
