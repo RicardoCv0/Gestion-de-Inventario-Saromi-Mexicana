@@ -1,6 +1,7 @@
 from django.shortcuts import render, get_object_or_404, redirect
 from django.http import HttpResponse
 from .forms import GemstoneForm, EntryForm, ExitForm, AdjustmentForm
+from django.contrib.auth.decorators import login_required
 
 from .models import Gemstone
 
@@ -129,3 +130,18 @@ def exit_movement(request, gemstone_id):
         return render(request, "inventory/gemstone_details.html", context)
 
     return render(request, "inventory/exit_movement.html", context)
+
+@login_required
+def dashboard(request):
+    profile = request.user.userprofile
+    role = profile.role
+
+    context = {
+        "role": role,
+        "is_gerente": role == "gerente",
+        "is_supervisor": role == "supervisor",
+        "is_surtidor": role == "surtidor",
+        "is_asistente": role == "asistente",
+        "is_contador": role == "contador",
+    }
+    return render(request, "inventory/dashboard.html", context)
