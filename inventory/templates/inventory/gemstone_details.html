@@ -1,36 +1,39 @@
-<style>
-    body {
-        margin: 20px;
-    }
-</style>
+{% extends "base.html" %}
 
-<body>
-    <h1>{{ gemstone.name }}</h1>
-    <ul>
-        <li>{{gemstone.id}}</li>
-        <li>{{gemstone.type}}</li>
-        <li>{{gemstone.ammount_available}}</li>
+{% block title %}{{ gemstone.name }}{% endblock %}
+
+{% block content %}
+
+<div class="card shadow p-4">
+
+    <h3 class="mb-3">{{ gemstone.name }}</h3>
+
+    <ul class="list-group mb-4">
+        <li class="list-group-item"><strong>ID:</strong> {{ gemstone.id }}</li>
+        <li class="list-group-item"><strong>Tipo:</strong> {{ gemstone.type }}</li>
+        <li class="list-group-item"><strong>Disponible:</strong> {{ gemstone.ammount_available }}</li>
     </ul>
 
-    <!-- GEMSTONE MOVEMENTS -->
-    <a href="/inventory/entry/{{gemstone.id}}">
-        Registrar entrada
-    </a> <br>
+    <div class="d-flex gap-2">
 
-    <a href="/inventory/exit/{{gemstone.id}}">
-        Registrar salida
-    </a> <br>
+        {% if is_surtidor or is_gerente %}
+        <a href="{% url 'entry' gemstone.id %}" class="btn btn-primary">Registrar entrada</a>
+        <a href="{% url 'exit' gemstone.id %}" class="btn btn-danger">Registrar salida</a>
+        {% endif %}
 
-    <a href="/inventory/adjustment/{{gemstone.id}}">
-        Ajustar cantidad disponible
-    </a> <br> <br> <br>
+        {% if is_asistente or is_gerente %}
+        <a href="{% url 'adjustment' gemstone.id %}" class="btn btn-warning text-dark">
+            Ajustar cantidad
+        </a>
+        {% endif %}
 
-    <!-- CRUD OPERATIONS FOR GEMSTONES -->
-    <a href="/inventory/edit/{{gemstone.id}}">
-        Editar nombre y tipo
-    </a> <br>
+        {% if is_gerente %}
+        <a href="{% url 'edit' gemstone.id %}" class="btn btn-info text-white">Editar</a>
+        <a href="{% url 'delete' gemstone.id %}" class="btn btn-outline-danger">Eliminar</a>
+        {% endif %}
 
-    <a href="/inventory/delete/{{gemstone.id}}">
-        Eliminar priedra preciosa
-    </a> <br>
-</body>
+    </div>
+
+</div>
+
+{% endblock %}

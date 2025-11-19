@@ -1,24 +1,33 @@
-<style>
-    body {
-        margin: 20px;
-    }
-</style>
+{% extends "base.html" %}
 
-<body>
-    <h1> Ajuste de {{gemstone.name}}</h1>
-    
-    <form action="/inventory/adjustment/{{gemstone.id}}/" method="post">
-        {% csrf_token %}
-        <fieldset>
-            <p> Cantidad actual: {{gemstone.ammount_available}}</p>
-    
-            <p> Cantidad corregida </p>
-            <input type="number" name="ammount" min="0">
-            
-            <p> Motivo </p>
-            <input type="text" name="motive">
-        </fieldset>
-        
-        <input type="submit" value="Create">
-    </form>
-<body>
+{% block title %}Ajuste | {{ gemstone.name }}{% endblock %}
+
+{% block content %}
+
+<div class="card shadow mx-auto" style="max-width: 550px;">
+    <div class="card-body">
+
+        <h3 class="text-center mb-3">Ajuste de {{ gemstone.name }}</h3>
+
+        <form method="post" action="{% url 'adjustment' gemstone.id %}">
+            {% csrf_token %}
+
+            <p class="text-muted">Cantidad actual: <strong>{{ gemstone.ammount_available }}</strong></p>
+
+            <div class="mb-3">
+                <label class="form-label">Cantidad corregida</label>
+                <input type="number" name="ammount" class="form-control" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Motivo del ajuste</label>
+                <input type="text" name="motive" class="form-control" required>
+            </div>
+
+            <button class="btn btn-warning w-100">Registrar ajuste</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

@@ -1,24 +1,31 @@
-<style>
-    body {
-        margin: 20px;
-    }
-</style>
+{% extends "base.html" %}
 
-<body>
-    {% if gemstones_list %}
-        <ul>
-        {% for gemstone in gemstones_list %}
-            <li>
-                <a href="/inventory/details/{{ gemstone.id }}/">
-                    {{ gemstone.name }}
-                </a>
-            </li>
-        {% endfor %}
-        </ul>
-    {% else %}
-        <p>No piedras preciosas registradas</p>
-    {% endif %}
+{% block title %}Inventario{% endblock %}
 
-    <br>
-    <a href="/inventory/create/"> Agregar Piedra Preciosa </a>
-</body>
+{% block content %}
+
+<h2 class="mb-4">Inventario de Materiales</h2>
+
+{% if gemstones_list %}
+<ul class="list-group shadow">
+    {% for gemstone in gemstones_list %}
+    <li class="list-group-item d-flex justify-content-between">
+        <span>
+            <strong>{{ gemstone.name }}</strong>
+            <br>
+            <small class="text-muted">ID: {{ gemstone.id }}</small>
+        </span>
+
+        <a href="{% url 'details' gemstone.id %}" class="btn btn-primary btn-sm">Ver</a>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p class="text-muted">No hay materiales registrados.</p>
+{% endif %}
+
+{% if is_gerente %}
+<a href="{% url 'create' %}" class="btn btn-success mt-4">Agregar Material</a>
+{% endif %}
+
+{% endblock %}

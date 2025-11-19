@@ -1,0 +1,78 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}SGISM{% endblock %}</title>
+
+    <!-- Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- Estilos globales -->
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .navbar-brand {
+            font-weight: bold;
+            letter-spacing: .5px;
+        }
+        .nav-role-badge {
+            font-size: 0.75rem;
+            padding: .3em .6em;
+            border-radius: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- NAVBAR -->
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+    <div class="container-fluid">
+
+        <!-- Logo -->
+        <a class="navbar-brand" href="{% url 'dashboard' %}">SGISM</a>
+
+        <!-- Menú móvil -->
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarContent">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <!-- Contenido -->
+        <div class="collapse navbar-collapse" id="navbarContent">
+
+
+            <!-- Menú derecha -->
+            <ul class="navbar-nav ms-auto">
+
+                <span class="navbar-text text-light me-3">
+                    {{ request.user.username }}
+                    <span class="nav-role-badge bg-info text-dark">{{ role }}</span>
+                </span>
+
+                <li class="nav-item">
+                    <a href="{% url 'logout' %}" class="btn btn-outline-light btn-sm">Cerrar sesión</a>
+                </li>
+
+            </ul>
+
+        </div>
+
+    </div>
+</nav>
+
+
+<!-- CONTENIDO PRINCIPAL -->
+<div class="container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- Bootstrap JS -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"></script>
+
+</body>
+</html>

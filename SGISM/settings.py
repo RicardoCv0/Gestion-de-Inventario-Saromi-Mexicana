@@ -28,7 +28,7 @@ DEBUG = True
 ALLOWED_HOSTS = []
 
 LOGIN_URL = '/users/login/'
-LOGIN_REDIRECT_URL = ''
+LOGIN_REDIRECT_URL = 'dashboard'
 LOGOUT_REDIRECT_URL = '/users/login/'
 
 
@@ -60,7 +60,7 @@ ROOT_URLCONF = 'SGISM.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / "sgism/templates"],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

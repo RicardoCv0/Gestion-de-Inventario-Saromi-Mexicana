@@ -1,25 +1,36 @@
-<style>
-    body {
-        margin: 20px;
-    }
-</style>
+{% extends "base.html" %}
 
-<body>
-    <h1> Añadir priedra preciosa </h1>
+{% block title %}Nuevo Material{% endblock %}
 
-    <form action="/inventory/create/" method="post">
-        {% csrf_token %}
-        <fieldset>
-            <p> Id </p>
-            <input type ="text" name="id">
+{% block content %}
 
-            <p> Nombre </p>
-            <input type ="text" name="name">
-            
-            <p> Tipo </p>
-            <input type ="text" name="type">
-        </fieldset>
-        
-        <input type="submit" value="Create">
-    </form>
-</body>
+<div class="card shadow mx-auto" style="max-width: 600px;">
+    <div class="card-body">
+
+        <h3 class="text-center mb-3">Añadir material</h3>
+
+        <form method="post" action="{% url 'create' %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">ID</label>
+                <input type="text" name="id" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input type="text" name="name" class="form-control">
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Tipo</label>
+                <input type="text" name="type" class="form-control">
+            </div>
+
+            <button class="btn btn-success w-100">Crear</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}

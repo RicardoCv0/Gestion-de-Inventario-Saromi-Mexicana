@@ -1,23 +1,31 @@
-<style>
-    body {
-        margin: 20px;
-    }
-</style>
+{% extends "base.html" %}
 
-<body>
-    <h1> Salida de {{gemstone.name}} </h1>
+{% block title %}Salida | {{ gemstone.name }}{% endblock %}
 
-    <form action="/inventory/exit/{{gemstone.id}}/" method="post">
-        {% csrf_token %}
-        <fieldset>
-            <p> Cantidad </p>
-            <input type ="number" name="ammount" min="0">
-            
-            <p> Destino </p>
-            <input type ="text" name="destination" min="0">
+{% block content %}
 
-        </fieldset>
-        
-        <input type="submit" value="Create">
-    </form>
-</body>
+<div class="card shadow mx-auto" style="max-width: 500px;">
+    <div class="card-body">
+
+        <h3 class="text-center mb-3">Salida de {{ gemstone.name }}</h3>
+
+        <form method="post" action="{% url 'exit' gemstone.id %}">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Cantidad</label>
+                <input type="number" name="ammount" class="form-control" min="0" required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Destino</label>
+                <input type="text" name="destination" class="form-control" required>
+            </div>
+
+            <button class="btn btn-danger w-100">Registrar salida</button>
+        </form>
+
+    </div>
+</div>
+
+{% endblock %}
