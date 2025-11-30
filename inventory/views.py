@@ -1,11 +1,10 @@
 from django.shortcuts import render, get_object_or_404, redirect
-from django.http import HttpResponse
+from django.utils import timezone
 from .forms import GemstoneForm, EntryForm, ExitForm, AdjustmentForm
 from django.contrib.auth.decorators import login_required
 from users.decorators import roles_required
-from .models import Gemstone
+from .models import Gemstone, EntryMovement, ExitMovement, AdjustmentMovement
 from django.core.paginator import Paginator
-from django.db.models import Q
 
 @login_required
 @roles_required(["supervisor", "gerente", "asistente"])
@@ -74,7 +73,6 @@ def delete_gemstone(request, gemstone_id):
     return redirect("index")
 
 # Gemstones Movement
-
 @login_required
 @roles_required(["surtidor", "gerente"])
 def entry_movement(request, gemstone_id):
@@ -94,7 +92,16 @@ def entry_movement(request, gemstone_id):
 
         gemstone.ammount_available += ammount
         gemstone.save()
-
+        
+        movement = EntryMovement.objects.create(
+            gemstone=gemstone,
+            ammount=ammount,
+            date_time=str(timezone.now()),
+            responsible=str(request.user),
+            type="entry",
+        )
+        movement.save()
+        
         return redirect("dashboard")
 
 
@@ -110,18 +117,29 @@ def adjustment_movement(request, gemstone_id):
     }
     
     if request.method == "POST":
-        form = EntryForm(request.POST)
+        form = AdjustmentForm(request.POST)
         
         if not form.is_valid(): return redirect("index")
 
         ammount = form.cleaned_data["ammount"]
+        motive = form.cleaned_data["motive"]
 
         if ammount < 0: return redirect("index")
 
         gemstone.ammount_available = ammount
         gemstone.save()
 
-        return render(request, "inventory/gemstone_details.html", context)
+        movement = AdjustmentMovement.objects.create(
+            gemstone=gemstone,
+            ammount=ammount,
+            date_time=str(timezone.now()),
+            responsible=str(request.user),
+            motive=motive,
+            type="adjustment",
+        )
+        movement.save()
+
+        return redirect("dashboard")
 
     return render(request, "inventory/adjustment_movement.html", context)
 
@@ -135,18 +153,29 @@ def exit_movement(request, gemstone_id):
     }
 
     if request.method == "POST":
-        form = EntryForm(request.POST)
+        form = ExitForm(request.POST)
         
         if not form.is_valid(): return redirect("index")
 
         ammount = form.cleaned_data["ammount"]
+        destination = form.cleaned_data["destination"]
 
         if ammount < 0 or ammount > gemstone.ammount_available: return redirect("index")
 
         gemstone.ammount_available -= ammount
         gemstone.save()
 
-        return render(request, "inventory/gemstone_details.html", context)
+        movement = ExitMovement.objects.create(
+            gemstone=gemstone,
+            ammount=ammount,
+            date_time=str(timezone.now()),
+            responsible=str(request.user),
+            destination=destination,
+            type="exit",
+        )
+        movement.save()        
+
+        return redirect("dashboard")
 
     return render(request, "inventory/exit_movement.html", context)
 

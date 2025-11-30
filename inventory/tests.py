@@ -37,6 +37,11 @@ class ExampleTestCase(TestCase):
         self.assertEqual(response.url, '/', f"Fallo en el redireccionamiento, el usuario fué redireccionado a: {response.url}")
 
 
+    # CP002 Validate invalid entry with the "surtidor" role
+    def test_valid_entry(self):
+        prepare_test_one()
+
+
 def create_users():
     # Definir Usuario Gerente
     gerente = User.objects.create(username='gerente')

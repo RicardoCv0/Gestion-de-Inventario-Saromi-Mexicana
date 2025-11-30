@@ -1,5 +1,5 @@
 from django import forms
-from .models import Gemstone, EntryMovement, ExitMovement, AdjustmentMovement
+from .models import Gemstone, InventoryMovement, EntryMovement, ExitMovement, AdjustmentMovement
 
 class GemstoneForm(forms.ModelForm):
     class Meta:
@@ -11,12 +11,12 @@ class EntryForm(forms.ModelForm):
         model = EntryMovement
         fields = ["ammount"]
 
-class ExitForm(forms.Form):
+class ExitForm(forms.ModelForm):
     class Meta:
         model = ExitMovement
         fields = ["ammount", "destination"]
 
-class AdjustmentForm(forms.Form):
+class AdjustmentForm(forms.ModelForm):
     class Meta:
         model = AdjustmentMovement
         fields = ["ammount", "motive"]
