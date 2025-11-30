@@ -108,7 +108,7 @@ def entry_movement(request, gemstone_id):
     return render(request, "inventory/entry_movement.html", context)
 
 @login_required
-@roles_required(["gerente"])
+@roles_required(["gerente", "asistente"])
 def adjustment_movement(request, gemstone_id):
     gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
 
