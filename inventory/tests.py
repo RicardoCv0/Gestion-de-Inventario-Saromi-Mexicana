@@ -18,7 +18,7 @@ class ExampleTestCase(TestCase):
         # Log in as "surtidor"
         client = Client()
         response = login_as_surtidor(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Register gemstone entry
         expected_ammount = required_gemstone.ammount_available + 50
@@ -48,7 +48,7 @@ class ExampleTestCase(TestCase):
         # Log in as "surtidor"
         client = Client()
         response = login_as_surtidor(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Register empty gemstone entry
         movement_count_before = EntryMovement.objects.count()
@@ -71,7 +71,7 @@ class ExampleTestCase(TestCase):
         # Log in as "surtidor"
         client = Client()
         response = login_as_surtidor(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Register gemstone exit
         expected_ammount = required_gemstone.ammount_available - 20
@@ -104,7 +104,7 @@ class ExampleTestCase(TestCase):
         # Log in as "surtidor"
         client = Client()
         response = login_as_surtidor(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Register invalid gemstone exit
         movement_count_before = ExitMovement.objects.count()
@@ -131,7 +131,7 @@ class ExampleTestCase(TestCase):
         # Log in as "asistente"
         client = Client()
         response = login_as_asistente(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Make valid adjustment
         context = {'ammount':195.0, 'motive':'damage'}
@@ -157,7 +157,7 @@ class ExampleTestCase(TestCase):
         # Log in as "asistente"
         client = Client()
         response = login_as_asistente(client)
-        self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
+        self.assertEqual(response.status_code, 302, "Iniciar sesión debería redireccionarte al dashboard de materiales")
 
         # Register invalid gemstone adjustment
         movement_count_before = AdjustmentMovement.objects.count()
@@ -169,10 +169,75 @@ class ExampleTestCase(TestCase):
         # Confirm movement was NOT stored on the database
         movement_count_after = AdjustmentMovement.objects.count()
         self.assertEqual(movement_count_before, movement_count_after, f"Se registró un movimiento cuando no se realizó ningún cambio")
-
-    #CP007, CP008  
+    
+    #CP007, CP008, CP009, CP010 Test permisions for each user type
     def test_user_permissions(self):
-        pass
+        # Assert preconditions
+        required_gemstone = get_gemstone('A1234')
+        self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
+
+        user = get_user('gerente')
+        self.assertNotEqual(user, None, "Precondición fallida: Usuario gerente no existe")
+        user = get_user('supervisor')
+        self.assertNotEqual(user, None, "Precondición fallida: Usuario supervisor no existe")
+        user = get_user('surtidor')
+        self.assertNotEqual(user, None, "Precondición fallida: Usuario surtidor no existe")
+        user = get_user('asistente')
+        self.assertNotEqual(user, None, "Precondición fallida: Usuario asistente no existe")
+
+        client = Client()
+        #Permissions for "gerente"
+        login_as_gerente(client)
+        response = client.get('/inventory/entry/A1234/')
+        self.assertEqual(response.status_code, 200, 'El gerente debe poder realizar entradas de material')
+        response = client.get('/inventory/exit/A1234/')
+        self.assertEqual(response.status_code, 200, 'El gerente debe poder realizar salidas de material')
+        response = client.get('/inventory/adjustment/A1234/')
+        self.assertEqual(response.status_code, 200, 'El gerente debe poder realizar ajustes de material')
+        response = client.get('/inventory/edit/A1234/')
+        self.assertEqual(response.status_code, 200, 'El gerente debe poder editar piedras preciosas')
+        response = client.get('/inventory/create/')
+        self.assertEqual(response.status_code, 200, 'El gerente debe poder crear piedras preciosas')
+        logout(client)
+
+        login_as_asistente(client)
+        response = client.get('/inventory/entry/A1234/')
+        self.assertEqual(response.status_code, 200, 'El asistente debe poder realizar entradas de material')
+        response = client.get('/inventory/exit/A1234/')
+        self.assertEqual(response.status_code, 200, 'El asistente debe poder realizar salidas de material')
+        response = client.get('/inventory/adjustment/A1234/')
+        self.assertEqual(response.status_code, 200, 'El asistente debe poder realizar ajustes de material')
+        response = client.get('/inventory/edit/A1234/')
+        self.assertEqual(response.status_code, 403, 'El asistente NO debe poder editar piedras preciosas')
+        response = client.get('/inventory/create/')
+        self.assertEqual(response.status_code, 403, 'El asistente NO debe poder crear piedras preciosas')
+        logout(client)
+
+        login_as_surtidor(client)
+        response = client.get('/inventory/entry/A1234/')
+        self.assertEqual(response.status_code, 200, 'El surtidor debe poder realizar entradas de material')
+        response = client.get('/inventory/exit/A1234/')
+        self.assertEqual(response.status_code, 200, 'El surtidor debe poder realizar salidas de material')
+        response = client.get('/inventory/adjustment/A1234/')
+        self.assertEqual(response.status_code, 403, 'El surtidor NO debe poder realizar ajustes de material')
+        response = client.get('/inventory/edit/A1234/')
+        self.assertEqual(response.status_code, 403, 'El surtidor NO debe poder editar piedras preciosas')
+        response = client.get('/inventory/create/')
+        self.assertEqual(response.status_code, 403, 'El surtidor NO debe poder crear piedras preciosas')
+        logout(client)
+
+        login_as_supervisor(client)
+        response = client.get('/inventory/entry/A1234/')
+        self.assertEqual(response.status_code, 403, 'El supervisor NO debe poder realizar entradas de material')
+        response = client.get('/inventory/exit/A1234/')
+        self.assertEqual(response.status_code, 403, 'El supervisor NO debe poder realizar salidas de material')
+        response = client.get('/inventory/adjustment/A1234/')
+        self.assertEqual(response.status_code, 403, 'El supervisor NO debe poder realizar ajustes de material')
+        response = client.get('/inventory/edit/A1234/')
+        self.assertEqual(response.status_code, 403, 'El supervisor NO debe poder editar piedras preciosas')
+        response = client.get('/inventory/create/')
+        self.assertEqual(response.status_code, 403, 'El supervisor NO debe poder crear piedras preciosas')
+        logout(client)
 
 
 def create_users():

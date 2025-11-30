@@ -31,7 +31,6 @@ def gemstone_details(request, gemstone_id):
     return render(request, "inventory/gemstone_details.html", context)
 
 # Gemstones Crud
-
 @login_required
 @roles_required(["gerente"])
 def create_gemstone(request):
@@ -74,7 +73,7 @@ def delete_gemstone(request, gemstone_id):
 
 # Gemstones Movement
 @login_required
-@roles_required(["surtidor", "gerente"])
+@roles_required(["surtidor", "gerente", "asistente"])
 def entry_movement(request, gemstone_id):
     gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
 
@@ -144,7 +143,7 @@ def adjustment_movement(request, gemstone_id):
     return render(request, "inventory/adjustment_movement.html", context)
 
 @login_required
-@roles_required(["surtidor", "gerente"])
+@roles_required(["surtidor", "gerente", "asistente"])
 def exit_movement(request, gemstone_id):
     gemstone = get_object_or_404(Gemstone, pk=gemstone_id)
 
