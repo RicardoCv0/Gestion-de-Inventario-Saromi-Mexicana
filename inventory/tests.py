@@ -1,6 +1,6 @@
 from django.test import TestCase, Client
 from django.contrib.auth.models import User
-from .models import Gemstone
+from .models import Gemstone, EntryMovement, ExitMovement, AdjustmentMovement
 
 class ExampleTestCase(TestCase):
     def setUp(self):
@@ -11,10 +11,12 @@ class ExampleTestCase(TestCase):
         prepare_test_one()
 
         # Assert preconditions
-        required_user = User.objects.get(username='surtidor')
+        try: required_user = User.objects.get(username='surtidor')
+        except: required_user = None
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario surtidor no existe")
 
-        required_gemstone = Gemstone.objects.get(pk="A1234")
+        try: required_gemstone = Gemstone.objects.get(pk="A1234")
+        except: required_gemstone = None
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
 
         # Log in as "surtidor"
@@ -36,10 +38,16 @@ class ExampleTestCase(TestCase):
         # Redirect user to the dashboard
         self.assertEqual(response.url, '/', f"Fallo en el redireccionamiento, el usuario fué redireccionado a: {response.url}")
 
+        # Confirm movement was stored on the database
+        try: movement = EntryMovement.objects.order_by('pk').last()
+        except: movement = None
+        self.assertNotEqual(movement, None, "No se guardó ningún movimiento en la base de datos")
+        self.assertEqual(movement.type, "entry", f"El tipo de movimiento debe ser 'entry', pero se guardó como {movement.type}")
+        self.assertEqual(movement.ammount, 50.0, f"La cantidad modificada fué 50, pero se guardó {movement.ammount}")
 
     # CP002 Validate invalid entry with the "surtidor" role
-    def test_valid_entry(self):
-        prepare_test_one()
+    #def test_valid_entry(self):
+    #    pass
 
 
 def create_users():
