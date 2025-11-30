@@ -5,27 +5,19 @@ from .models import Gemstone, EntryMovement, ExitMovement, AdjustmentMovement
 class ExampleTestCase(TestCase):
     def setUp(self):
         create_users()
+        create_mock_gemstone()
     
     # CP001 Test correct entry with the "surtidor" role
     def test_valid_entry(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='surtidor')
-        except: required_user = None
+        required_user = get_user('surtidor')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario surtidor no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
 
         # Log in as "surtidor"
         client = Client()
-        context = {
-            'username': 'surtidor',
-            'password': 'surtidor',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_surtidor(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Register gemstone entry
@@ -47,24 +39,15 @@ class ExampleTestCase(TestCase):
 
     # CP002 Test incorrect entry with the "surtidor" role
     def test_invalid_entry(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='surtidor')
-        except: required_user = None
+        required_user = get_user('surtidor')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario surtidor no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
 
         # Log in as "surtidor"
         client = Client()
-        context = {
-            'username': 'surtidor',
-            'password': 'surtidor',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_surtidor(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Register empty gemstone entry
@@ -79,24 +62,15 @@ class ExampleTestCase(TestCase):
 
     # CP003 Test correct exit with the "surtidor" role
     def test_valid_exit(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='surtidor')
-        except: required_user = None
+        required_user = get_user('surtidor')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario surtidor no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
 
         # Log in as "surtidor"
         client = Client()
-        context = {
-            'username': 'surtidor',
-            'password': 'surtidor',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_surtidor(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Register gemstone exit
@@ -118,26 +92,18 @@ class ExampleTestCase(TestCase):
 
     # CP004 Test incorrect exit with the "surtidor" role
     def test_invalid_exit(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='surtidor')
-        except: required_user = None
+        required_user = get_user('surtidor')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario surtidor no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
+        
         required_gemstone.ammount_available = 10.0
         required_gemstone.save()
 
         # Log in as "surtidor"
         client = Client()
-        context = {
-            'username': 'surtidor',
-            'password': 'surtidor',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_surtidor(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Register invalid gemstone exit
@@ -153,26 +119,18 @@ class ExampleTestCase(TestCase):
     
     #CP005 Test correct adjustment with the "Asistente" role
     def test_valid_adjustment(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='asistente')
-        except: required_user = None
+        required_user = get_user('asistente')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario asistente no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
+        
         required_gemstone.ammount_available = 200.0
         required_gemstone.save()
 
         # Log in as "asistente"
         client = Client()
-        context = {
-            'username': 'asistente',
-            'password': 'asistente',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_asistente(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Make valid adjustment
@@ -190,24 +148,15 @@ class ExampleTestCase(TestCase):
     
     #CP006 Test incorrect Adjustment with the "Asistente" role
     def test_invalid_adjustment(self):
-        create_mock_gemstone()
-
         # Assert preconditions
-        try: required_user = User.objects.get(username='asistente')
-        except: required_user = None
+        required_user = get_user('asistente')
         self.assertNotEqual(required_user, None, "Precondición fallida: Usuario asistente no existe")
-
-        try: required_gemstone = Gemstone.objects.get(pk="A1234")
-        except: required_gemstone = None
+        required_gemstone = get_gemstone('A1234')
         self.assertNotEqual(required_gemstone, None, "Precondición fallida: Piedra A1234 no existe")
 
         # Log in as "asistente"
         client = Client()
-        context = {
-            'username': 'asistente',
-            'password': 'asistente',
-        }
-        response = client.post('/users/login/', context)
+        response = login_as_asistente(client)
         self.assertEqual(response.status_code, 302, "Iniciar sesión con estas credenciales debería redireccionarte al dashboard de materiales")
 
         # Register invalid gemstone adjustment
@@ -220,10 +169,11 @@ class ExampleTestCase(TestCase):
         # Confirm movement was NOT stored on the database
         movement_count_after = AdjustmentMovement.objects.count()
         self.assertEqual(movement_count_before, movement_count_after, f"Se registró un movimiento cuando no se realizó ningún cambio")
-    
+
     #CP007, CP008  
-    def test_user_permissions():
+    def test_user_permissions(self):
         pass
+
 
 def create_users():
     # Definir Usuario Gerente
@@ -250,6 +200,35 @@ def create_users():
     asistente.userprofile.role = "asistente"
     asistente.save()
 
+def get_gemstone(pk):
+    try: gemstone = Gemstone.objects.get(pk=pk)
+    except: gemstone = None
+    return gemstone
+
+def get_user(username):
+    try: user = User.objects.get(username=username)
+    except: user = None
+    return user
+
 def create_mock_gemstone():
     ruby = Gemstone.objects.create(id="A1234", type='Rubí', name='Rubí Rojo', ammount_available=80.0)
     ruby.save()
+
+def login_as_gerente(client):
+    context = {'username': 'gerente', 'password': 'gerente'}
+    return client.post('/users/login/', context)
+
+def login_as_supervisor(client):
+    context = {'username': 'supervisor', 'password': 'supervisor'}
+    return client.post('/users/login/', context)
+
+def login_as_surtidor(client):
+    context = {'username': 'surtidor', 'password': 'surtidor'}
+    return client.post('/users/login/', context)
+
+def login_as_asistente(client):
+    context = {'username': 'asistente', 'password': 'asistente'}
+    return client.post('/users/login/', context)
+
+def logout(client):
+    return client.post('/users/logout/')
