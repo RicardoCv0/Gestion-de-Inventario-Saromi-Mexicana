@@ -95,7 +95,7 @@ def entry_movement(request, gemstone_id):
         gemstone.ammount_available += ammount
         gemstone.save()
 
-        return render(request, "inventory/gemstone_details.html", context)
+        return redirect("dashboard")
 
 
     return render(request, "inventory/entry_movement.html", context)
