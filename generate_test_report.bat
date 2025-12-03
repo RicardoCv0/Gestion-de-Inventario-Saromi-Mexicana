@@ -1,0 +1,1 @@
+py .\manage.py test --verbosity=2 > .\salida.txt  2>&1
