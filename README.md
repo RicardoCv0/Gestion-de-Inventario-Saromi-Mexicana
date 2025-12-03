@@ -10,12 +10,24 @@
 py -m venv venv
 ```
 
-2. Instala django
+2. Activa el entorno virtual
+
+- En windows:
+```powershell
+.\venv\Scripts\activate
+```
+
+- En Linux:
+```shell
+source venv/bin/activate
+```
+
+3. Instala django
 ```shell
 py -m pip install django
 ```
 
-3. Inicia el servidor
+4. Inicia el servidor
 ```shell
 py manage.py runserver 
 ```
